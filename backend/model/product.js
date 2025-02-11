@@ -9,9 +9,21 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your product description!"],
   },
+  productDetail: {
+    type: String,
+    required: [true, "Please enter your product Detail!"],
+  },
   category: {
     type: String,
     required: [true, "Please enter your product category!"],
+  },
+  color: {
+    type: String,
+    required: [true, "Please enter your product color!"],
+  },
+  size: {
+    type: String,
+    required: [true, "Please enter your product size!"],
   },
   tags: {
     type: String,

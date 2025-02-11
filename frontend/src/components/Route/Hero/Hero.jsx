@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick"; // Import Slider component from react-slick
- // Optional: Include additional CSS file
+import "slick-carousel/slick/slick.css"; // Import default styles
+import "slick-carousel/slick/slick-theme.css"; // Import default theme styles
 
 const Hero = () => {
   const sliderData = [
@@ -33,39 +34,36 @@ const Hero = () => {
   };
 
   return (
-    <>
-      {/* Full-Screen Image Slider */}
-      <div className="relative w-full mb-4">
-        <Slider {...sliderSettings}>
-          {sliderData.map((item, index) => (
-            <div key={index} className="relative w-full h-full">
-              {/* Background Image */}
-              <img
-                src={item.img}
-                alt={`Slide showing ${item.title}`}
-                className="object-cover w-full h-full"
-              />
-              {/* Overlay Content */}
-              <div className="absolute bottom-10 left-5 sm:bottom-32 sm:left-16 text-[#143d59] w-4/5 sm:w-2/3">
-                <h3 className="font-bold text-xl sm:text-3xl md:text-4xl mb-2 sm:mb-4">
-                  {item.title}
-                </h3>
-                <p className="text-xs sm:text-base md:text-lg mb-4 sm:mb-6">
-                  {item.description}
-                </p>
-                <Link to="/products">
-                  <div className="inline-block px-3 py-2 sm:px-5 sm:py-3 bg-black rounded-md">
-                    <span className="text-white font-[Poppins] text-xs sm:text-sm md:text-base">
-                      Shop Now
-                    </span>
-                  </div>
-                </Link>
-              </div>
+    <div className="relative w-full mb-4 z-10">
+      <Slider {...sliderSettings}>
+        {sliderData.map((item, index) => (
+          <div key={index} className="relative w-full h-full">
+            {/* Background Image */}
+            <img
+              src={item.img}
+              alt={`Slide showing ${item.title}`}
+              className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+            />
+            {/* Overlay Content */}
+            <div className="absolute inset-0 flex flex-col justify-center items-start bg-black bg-opacity-50 p-5 sm:p-10">
+              <h3 className="font-bold text-white text-2xl sm:text-4xl md:text-5xl mb-2 sm:mb-4">
+                {item.title}
+              </h3>
+              <p className="text-white text-sm sm:text-lg md:text-xl mb-4 sm:mb-6">
+                {item.description}
+              </p>
+              <Link to="/products">
+                <div className="inline-block px-4 py-2 sm:px-6 sm:py-3 bg-yellow-500 rounded-md transition duration-300 hover:bg-yellow-400">
+                  <span className="text-black font-semibold text-sm sm:text-base">
+                    Shop Now
+                  </span>
+                </div>
+              </Link>
             </div>
-          ))}
-        </Slider>
-      </div>
-    </>
+          </div>
+        ))}
+      </Slider>
+    </div>
   );
 };
 

@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AiFillHeart,
-  AiFillStar,
   AiOutlineEye,
   AiOutlineHeart,
   AiOutlineShoppingCart,
-  AiOutlineStar,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
@@ -15,10 +13,8 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlist";
-import { useEffect } from "react";
 import { addTocart } from "../../../redux/actions/cart";
 import { toast } from "react-toastify";
-import Ratings from "../../Products/Ratings";
 
 const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -61,76 +57,66 @@ const ProductCard = ({ data, isEvent }) => {
   };
 
   return (
-    <>
-      <div className="w-full h-auto bg-white rounded-lg shadow-sm p-3 relative cursor-pointer ">
-        <div className="flex justify-end"></div>
-        <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
-          <img
-            src={`${data.images && data.images[0]?.url}`}
-            alt=""
-            className="w-full h-[150px] object-contain hover:scale-110 transition-transform duration-300"
-          />
-        </Link>
-        <Link to={`/shop/preview/${data?.shop._id}`}>
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
-        </Link>
-        <Link to={`${isEvent === true ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
-          <h5 className="pb-3 mt-1 h-[50px] font-[500]">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
-          </h5>
-
-          {/* <div className="flex">
-          <Ratings rating={data?.ratings} />
-          </div> */}
-
-          <div className="py-2 flex items-center justify-between">
-            <div className="flex">
-              <h5 className={`${styles.productDiscountPrice}`}>
-                {data.originalPrice === 0
-                  ? data.originalPrice
-                  : data.discountPrice}
-                ₹
-              </h5>
-              <h6 className={`${styles.price}`}>
-                {data.originalPrice ? data.originalPrice + " ₹" : null}
+    <div className="w-full h-auto bg-white rounded-lg shadow-lg p-4 relative transition-transform transform hover:scale-105">
+      <Link to={`${isEvent ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
+        <img
+          src={data.images && data.images[0]?.url}
+          alt={data.name}
+          className="aspect-square w-full rounded-lg bg-gray-200 object-cover transition-opacity duration-300 hover:opacity-75"
+        />
+      </Link>
+      <Link to={`${isEvent ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
+        <h5 className="mt-2 text-lg font-semibold text-gray-800">
+          {data.name.length > 40 ? `${data.name.slice(0, 40)}...` : data.name}
+        </h5>
+        <div className="flex items-center justify-between mt-1">
+          <div className="flex flex-col">
+            <h5 className={`${styles.productDiscountPrice}`}>
+              {data.originalPrice === 0 ? data.originalPrice : data.discountPrice} ₹
+            </h5>
+            {data.originalPrice && (
+              <h6 className={`${styles.price} line-through text-gray-500`}>
+                {data.originalPrice} ₹
               </h6>
-            </div>
-            <span className="font-[400] text-[14px] text-[#000000]">
-              {data?.sold_out} sold
-            </span>
+            )}
           </div>
-        </Link>
-
-        {/* side options */}
-        <div className="flex justify-around">
-          <button
-            className={`px-2 py-2 rounded text-[13px] bg-[#143d59] text-white ${click ? "bg-yellow-600 text-black" : "bg-[#143d59] text-white"
-              } cursor-pointer transition duration-300 ease-in-out hover:bg-yellow-300 hover:text-black`}
-            onClick={() =>
-              click ? removeFromWishlistHandler(data) : addToWishlistHandler(data)
-            }
-            title={click ? "Remove from Wishlist" : "Add to Wishlist"}
-          >
-            {click ? "Remove from Wishlist" : "Add to Wishlist"}
-          </button>
-          {/* <AiOutlineEye
-            size={22}
-            className="cursor-pointer"
-            onClick={() => setOpen(!open)}
-            color="#333"
-            title="Quick view"
-          /> */}
-          <button
-            className="px-2 py-1 text-[13px] bg-[#143d59] text-white rounded cursor-pointer transition duration-300 ease-in-out hover:bg-yellow-300 hover:text-black"
-            onClick={() => addToCartHandler(data._id)}
-            title="Add to cart"
-          >
-            Add to Cart
-          </button>
-          {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
+          <span className="text-sm text-gray-600">{data.sold_out} sold</span>
         </div>
+      </Link>
+
+      <div className="absolute top-2 right-2 flex flex-col">
+        {click ? (
+          <AiFillHeart
+            size={22}
+            className="cursor-pointer text-red-500"
+            onClick={() => removeFromWishlistHandler(data)}
+            title="Remove from wishlist"
+          />
+        ) : (
+          <AiOutlineHeart
+            size={22}
+            className="cursor-pointer text-gray-600"
+            onClick={() => addToWishlistHandler(data)}
+            title="Add to wishlist"
+          />
+        )}
+        <AiOutlineEye
+          size={22}
+          className="cursor-pointer text-gray-600 mt-2"
+          onClick={() => setOpen(!open)}
+          title="Quick view"
+        />
       </div>
-    </>
+
+      <button
+        className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg transition duration-300 hover:bg-yellow-300 hover:text-black"
+        onClick={() => addToCartHandler(data._id)}
+        title="Add to cart"
+      >
+        Add to Cart
+      </button>
+      {open && <ProductDetailsCard setOpen={setOpen} data={data} />}
+    </div>
   );
 };
 

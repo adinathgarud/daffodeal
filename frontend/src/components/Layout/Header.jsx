@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
-import logo from "../../Assests/images/Deffodeal.png"
+//import logo from "../../Assests/images/Deffodeal.png"
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -44,6 +44,25 @@ const Header = ({ activeHeading }) => {
     setSearchData(filteredProducts);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && searchTerm.trim() !== "") {
+      performSearch(searchTerm);
+    }
+  };
+
+
+  const performSearch = (query) => {
+    console.log("Searching for:", query);
+    const filteredProducts =
+      allProducts &&
+      allProducts.filter((product) =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
+    setSearchData(filteredProducts);
+  };
+
+  
+
   window.addEventListener("scroll", () => {
     if (window.scrollY > 70) {
       setActive(true);
@@ -55,14 +74,15 @@ const Header = ({ activeHeading }) => {
   return (
     <>
       <div className={`${styles.section}`}>
-        <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
+        <div className="hidden 800px:h-[30px] 800px:my-[10px] 800px:flex items-center justify-between">
           <div >
             <Link to="/">
-              <img
+              {/* <img
                 src={logo}
                 alt=""
-                className="mt-2 cursor-pointer w- h-[80px]"
-              />
+                className="mt-2 cursor-pointer w- h-[70px]"
+              /> */}
+              <h1>Daffodeal</h1>
             </Link>
           </div>
           {/* search box */}
@@ -72,6 +92,7 @@ const Header = ({ activeHeading }) => {
               placeholder="Search Product..."
               value={searchTerm}
               onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
               className="h-[40px] w-full px-2 border-[#f4b41a] border-[1px] rounded-full"
             />
             <AiOutlineSearch
@@ -112,15 +133,15 @@ const Header = ({ activeHeading }) => {
       <div
         className={`${
           active === true ? "shadow-sm fixed top-0 left-0 z-10" : null
-        } transition hidden 800px:flex items-center justify-between w-full bg-[#143d59] h-[70px]`}
+        } transition hidden 800px:flex items-center justify-between w-full bg-[#143d59] h-[40px]`}
       >
         <div
           className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
         >
           {/* categories */}
           <div onClick={() => setDropDown(!dropDown)}>
-            <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
-              <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
+            <div className="relative h-[35px] mt-[10px] w-[270px] hidden 1000px:block">
+              <BiMenuAltLeft size={30} className="absolute top-1 left-2" />
               <button
                 className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
               >
@@ -218,11 +239,12 @@ const Header = ({ activeHeading }) => {
           </div>
           <div >
             <Link to="/">
-              <img
+              {/* <img
                 src={logo}
                 alt=""
                 className="mt-2 cursor-pointer h-[50px]"
-              />
+              /> */}
+              <h1>Daffodeal</h1>
             </Link>
           </div>
           <div>
@@ -231,7 +253,7 @@ const Header = ({ activeHeading }) => {
               onClick={() => setOpenCart(true)}
             >
               <AiOutlineShoppingCart size={30} />
-              <span class="absolute right-0 top-0 rounded-full bg-[#143d59] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+              <span className="absolute right-0 top-0 rounded-full bg-[#143d59] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                 {cart && cart.length}
               </span>
             </div>
@@ -256,7 +278,7 @@ const Header = ({ activeHeading }) => {
                     onClick={() => setOpenWishlist(true) || setOpen(false)}
                   >
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
-                    <span class="absolute right-0 top-0 rounded-full bg-[#143d59] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+                    <span className="absolute right-0 top-0 rounded-full bg-[#143d59] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                       {wishlist && wishlist.length}
                     </span>
                   </div>

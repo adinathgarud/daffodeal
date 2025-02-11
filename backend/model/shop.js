@@ -24,10 +24,10 @@ const shopSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  adhharNumber: {
-    type: Number,
-    required: true,
-  },
+  // adhharNumber: {
+  //   type: Number,
+  //   required: true,
+  // },
   phoneNumber: {
     type: Number,
     required: true,

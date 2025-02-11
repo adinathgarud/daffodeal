@@ -29,14 +29,17 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(getAllProductsShop(data && data?.shop._id));
+    if (data && data.shop) {
+      dispatch(getAllProductsShop(data.shop._id));
+    }
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
       setClick(true);
     } else {
       setClick(false);
     }
-  }, [data, wishlist]);
+  }, [data, wishlist, dispatch]);
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -48,18 +51,18 @@ const ProductDetails = ({ data }) => {
     }
   };
 
-  const removeFromWishlistHandler = (data) => {
+  const removeFromWishlistHandler = () => {
     setClick(!click);
     dispatch(removeFromWishlist(data));
   };
 
-  const addToWishlistHandler = (data) => {
+  const addToWishlistHandler = () => {
     setClick(!click);
     dispatch(addToWishlist(data));
   };
 
-  const addToCartHandler = (id) => {
-    const isItemExists = cart && cart.find((i) => i._id === id);
+  const addToCartHandler = () => {
+    const isItemExists = cart && cart.find((i) => i._id === data._id);
     if (isItemExists) {
       toast.error("Item already in cart!");
     } else {
@@ -85,28 +88,24 @@ const ProductDetails = ({ data }) => {
       0
     );
 
-  const avg =  totalRatings / totalReviewsLength || 0;
-
+  const avg = totalReviewsLength ? totalRatings / totalReviewsLength : 0;
   const averageRating = avg.toFixed(2);
-
 
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
       const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = data.shop._id;
-      await axios
-        .post(`${server}/conversation/create-new-conversation`, {
+      try {
+        const res = await axios.post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
           userId,
           sellerId,
-        })
-        .then((res) => {
-          navigate(`/inbox?${res.data.conversation._id}`);
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message);
         });
+        navigate(`/inbox?${res.data.conversation._id}`);
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
     } else {
       toast.error("Please login to create a conversation");
     }
@@ -118,38 +117,36 @@ const ProductDetails = ({ data }) => {
         <div className={`${styles.section} w-[90%] 800px:w-[80%]`}>
           <div className="w-full py-5">
             <div className="block w-full 800px:flex">
+              {/* Product Image Section */}
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${data && data.images[select]?.url}`}
-                  alt=""
-                  className="w-[80%]"
+                  src={data.images[select]?.url}
+                  alt={data.name}
+                  className="w-[80%] rounded-lg shadow-lg"
                 />
-                <div className="w-full flex">
-                  {data &&
-                    data.images.map((i, index) => (
-                      <div
-                        className={`${
-                          select === 0 ? "border" : "null"
-                        } cursor-pointer`}
-                      >
-                        <img
-                          src={`${i?.url}`}
-                          alt=""
-                          className="h-[100px] overflow-hidden mr-0 mt-3"
-                          onClick={() => setSelect(index)}
-                        />
-                      </div>
-                    ))}
-                  <div
-                    className={`${
-                      select === 1 ? "border" : "null"
-                    } cursor-pointer`}
-                  ></div>
+                <div className="w-full flex mt-3">
+                  {data.images.map((i, index) => (
+                    <div
+                      key={index}
+                      className={`cursor-pointer ${
+                        select === index ? "border border-blue-500" : ""
+                      }`}
+                    >
+                      <img
+                        src={i.url}
+                        alt=""
+                        className="h-[70px] rounded-lg overflow-hidden mr-2"
+                        onClick={() => setSelect(index)}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
+
+              {/* Product Details Section */}
               <div className="w-full 800px:w-[50%] pt-5">
                 <h1 className={`${styles.productTitle}`}>{data.name}</h1>
-                <p>{data.description}</p>
+                <p className="text-gray-700">{data.description}</p>
                 <div className="flex pt-3">
                   <h4 className={`${styles.productDiscountPrice}`}>
                     {data.discountPrice}₹
@@ -160,7 +157,7 @@ const ProductDetails = ({ data }) => {
                 </div>
 
                 <div className="flex items-center mt-12 justify-between pr-3">
-                  <div>
+                  <div className="flex items-center">
                     <button
                       className="bg-gradient-to-r from-teal-900 to-teal-800 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
                       onClick={decrementCount}
@@ -181,25 +178,36 @@ const ProductDetails = ({ data }) => {
                     {click ? (
                       <AiFillHeart
                         size={30}
-                        className="cursor-pointer"
-                        onClick={() => removeFromWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
+                        className="cursor-pointer text-red-500"
+                        onClick={removeFromWishlistHandler}
                         title="Remove from wishlist"
                       />
                     ) : (
                       <AiOutlineHeart
                         size={30}
-                        className="cursor-pointer"
-                        onClick={() => addToWishlistHandler(data)}
-                        color={click ? "red" : "#333"}
+                        className="cursor-pointer text-gray-500"
+                        onClick={addToWishlistHandler}
                         title="Add to wishlist"
                       />
                     )}
                   </div>
                 </div>
+                <br />
+                <div className="flex flex-col justify-around ">
+                <div className="pt-3">
+                  <h2>
+                    <strong>Size:</strong> {data.size}
+                  </h2>
+                </div>
+                <div className="pt-3">
+                  <h2>
+                    <strong>Color:</strong> {data.color}
+                  </h2>
+                </div>
+                </div>
                 <div
                   className={`${styles.button} !mt-6 !rounded !h-11 flex items-center`}
-                  onClick={() => addToCartHandler(data._id)}
+                  onClick={addToCartHandler}
                 >
                   <span className="text-white flex items-center">
                     Add to cart <AiOutlineShoppingCart className="ml-1" />
@@ -208,7 +216,7 @@ const ProductDetails = ({ data }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
                     <img
-                      src={`${data?.shop?.avatar?.url}`}
+                      src={data?.shop?.avatar?.url}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -303,7 +311,7 @@ const ProductDetailsInfo = ({
       {active === 1 ? (
         <>
           <p className="py-2 text-[18px] leading-8 pb-10 whitespace-pre-line">
-            {data.description}
+            {data.productDetail}
           </p>
         </>
       ) : null}
@@ -312,16 +320,16 @@ const ProductDetailsInfo = ({
         <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
           {data &&
             data.reviews.map((item, index) => (
-              <div className="w-full flex my-2">
+              <div key={index} className="w-full flex my-2">
                 <img
-                  src={`${item.user.avatar?.url}`}
+                  src={item.user.avatar?.url}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
-                <div className="pl-2 ">
+                <div className="pl-2">
                   <div className="w-full flex items-center">
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>
-                    <Ratings rating={data?.ratings} />
+                    <Ratings rating={item.rating} />
                   </div>
                   <p>{item.comment}</p>
                 </div>
@@ -330,7 +338,7 @@ const ProductDetailsInfo = ({
 
           <div className="w-full flex justify-center">
             {data && data.reviews.length === 0 && (
-              <h5>No Reviews have for this product!</h5>
+              <h5>No Reviews have been made for this product!</h5>
             )}
           </div>
         </div>
@@ -338,11 +346,11 @@ const ProductDetailsInfo = ({
 
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
-          <div className="w-full 800px:w-[50%]">
+          < div className="w-full 800px:w-[50%]">
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${data?.shop?.avatar?.url}`}
+                  src={data?.shop?.avatar?.url}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />

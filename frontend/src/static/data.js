@@ -195,6 +195,11 @@ export const navItems = [
       subTitle: "",
       image_Url:
         "https://png.pngtree.com/png-clipart/20221003/original/pngtree-luxury-ornament-logo-design-with-abstract-circular-shape-universal-creative-premium-png-image_8653876.png",
+        subcategories: [
+      { id: 1, title: "Men's Clothing" },
+      { id: 2, title: "Women's Clothing" },
+      { id: 3, title: "Accessories" },
+    ],
     },
     {
       id: 2,
@@ -202,6 +207,11 @@ export const navItems = [
       subTitle: "",
       image_Url:
         "https://img.freepik.com/premium-vector/jewelry-icon-vector-image-can-be-used-prehistoric_120816-75836.jpg?uid=P147423838&ga=GA1.1.819710834.1716530000&semt=ais_hybrid",
+        subcategories: [
+      { id: 1, title: "Men's Clothing" },
+      { id: 2, title: "Women's Clothing" },
+      { id: 3, title: "Accessories" },
+    ],
     },
     {
       id: 3,
@@ -209,6 +219,11 @@ export const navItems = [
       subTitle: "",
       image_Url:
         "https://img.freepik.com/free-vector/ordering-goods-online-internet-store-online-shopping-niche-e-commerce-website-mother-buying-babies-clothes-footwear-toys-infant-accessories_335657-2345.jpg?w=2000",
+        subcategories: [
+      { id: 1, title: "Men's Clothing" },
+      { id: 2, title: "Women's Clothing" },
+      { id: 3, title: "Accessories" },
+    ],
     },
     
     {
@@ -217,6 +232,11 @@ export const navItems = [
       subTitle: "",
       image_Url:
         "https://img.freepik.com/premium-vector/beauty-salon-illustration_949991-129.jpg?uid=P147423838&ga=GA1.1.819710834.1716530000&semt=ais_hybrid",
+        subcategories: [
+      { id: 1, title: "Men's Clothing" },
+      { id: 2, title: "Women's Clothing" },
+      { id: 3, title: "Accessories" },
+    ],
     },
     {
       id: 5,
@@ -224,6 +244,11 @@ export const navItems = [
       subTitle: "",
       image_Url:
         "https://img.freepik.com/premium-vector/outline-icons-chinese-new-year-traditional-symbols-decorations-gifts-your-design-2022_721440-1449.jpg?w=740",
+        subcategories: [
+      { id: 1, title: "Mobile Phones" },
+      { id: 2, title: "Laptops" },
+      { id: 3, title: "Cameras" },
+    ],
     },
     {
       id: 6,
@@ -231,49 +256,112 @@ export const navItems = [
       subTitle: "",
       image_Url:
         "https://img.freepik.com/premium-vector/medicine-icon-vector_606479-5893.jpg?w=740",
+        subcategories: [
+      { id: 1, title: "Men's Clothing" },
+      { id: 2, title: "Women's Clothing" },
+      { id: 3, title: "Accessories" },
+    ],
+    },
+    // {
+    //   id: 7,
+    //   title: "Jewellery Material",
+    //   subTitle: "",
+    //   image_Url:
+    //     "https://5.imimg.com/data5/SELLER/Default/2023/8/333975911/ZO/VX/FY/92170039/picture5-500x500.png",
+    // },
+    // {
+    //   id: 8,
+    //   title: "DIY Kits",
+    //   subTitle: "",
+    //   image_Url:
+    //     "https://img.freepik.com/premium-vector/it-yourself-icon-vector-image-can-be-used-urban-tribes_120816-350334.jpg?w=740",
+    // },
+    // {
+    //   id: 9,
+    //   title: "Festive Decorative",
+    //   subTitle: "",
+    //   image_Url:
+    //     "https://img.freepik.com/free-vector/boho-element-collection-with-flat-design_23-2147834757.jpg?uid=P147423838&ga=GA1.1.819710834.1716530000&semt=ais_hybrid",
+    // },
+    // {
+    //   id: 10,
+    //   title: "Giveaway Items",
+    //   subTitle: "",
+    //   image_Url:
+    //     "http://www.findbestqualityfreestuff.com/wp-content/uploads/2016/11/Personalized-Giveaway-Items-2.jpg",
+    // },
+    // {
+    //   id: 11,
+    //   title: "Gift Hampers",
+    //   subTitle: "",
+    //   image_Url:
+    //     "https://www.thefoodaholic.co.uk/wp-content/uploads/2017/11/DSC_0024.jpg",
+    // },
+    // {
+    //   id: 12,
+    //   title: "Wall Decoration",
+    //   subTitle: "",
+    //   image_Url:
+    //     "https://www.thefoodaholic.co.uk/wp-content/uploads/2017/11/DSC_0024.jpg",
+    // },
+  ];
+
+  // color data
+  export const colorData = [
+    {
+      id: 1,
+      title: "White", 
+    },
+    {
+      id: 2,
+      title: "Yellow", 
+    },
+    {
+      id: 3,
+      title: "Red",
+    },
+    {
+      id: 4,
+      title: "Green",
+    },
+    {
+      id: 5,
+      title: "Black",
+    },
+    {
+      id: 6,
+      title: "Blue",
     },
     {
       id: 7,
-      title: "Jewellery Material",
-      subTitle: "",
-      image_Url:
-        "https://5.imimg.com/data5/SELLER/Default/2023/8/333975911/ZO/VX/FY/92170039/picture5-500x500.png",
+      title: "Multi Color",
+    },
+    
+  ];
+  // size data
+  export const sizeData = [
+    {
+      id: 1,
+      title: "Small", 
     },
     {
-      id: 8,
-      title: "DIY Kits",
-      subTitle: "",
-      image_Url:
-        "https://img.freepik.com/premium-vector/it-yourself-icon-vector-image-can-be-used-urban-tribes_120816-350334.jpg?w=740",
+      id: 2,
+      title: "Medium", 
     },
     {
-      id: 9,
-      title: "Festive Decorative",
-      subTitle: "",
-      image_Url:
-        "https://img.freepik.com/free-vector/boho-element-collection-with-flat-design_23-2147834757.jpg?uid=P147423838&ga=GA1.1.819710834.1716530000&semt=ais_hybrid",
+      id: 3,
+      title: "Large",
     },
     {
-      id: 10,
-      title: "Giveaway Items",
-      subTitle: "",
-      image_Url:
-        "http://www.findbestqualityfreestuff.com/wp-content/uploads/2016/11/Personalized-Giveaway-Items-2.jpg",
+      id: 4,
+      title: "Extra Large",
     },
     {
-      id: 11,
-      title: "Gift Hampers",
-      subTitle: "",
-      image_Url:
-        "https://www.thefoodaholic.co.uk/wp-content/uploads/2017/11/DSC_0024.jpg",
+      id: 5,
+      title: "Free Size",
     },
-    {
-      id: 12,
-      title: "Wall Decoration",
-      subTitle: "",
-      image_Url:
-        "https://www.thefoodaholic.co.uk/wp-content/uploads/2017/11/DSC_0024.jpg",
-    },
+   
+    
   ];
   
   // product Data

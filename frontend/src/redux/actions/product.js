@@ -6,7 +6,10 @@ export const createProduct =
   (
     name,
     description,
+    productDetail,
     category,
+    color,
+    size,
     tags,
     originalPrice,
     discountPrice,
@@ -24,7 +27,10 @@ export const createProduct =
         `${server}/product/create-product`,
         name,
         description,
+        productDetail,
         category,
+        color,
+        size,
         tags,
         originalPrice,
         discountPrice,
@@ -68,6 +74,7 @@ export const getAllProductsShop = (id) => async (dispatch) => {
 
 // delete product of a shop
 export const deleteProduct = (id) => async (dispatch) => {
+  console.log("Deleting product with ID:", id);
   try {
     dispatch({
       type: "deleteProductRequest",

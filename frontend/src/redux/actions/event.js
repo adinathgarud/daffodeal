@@ -2,21 +2,22 @@ import axios from "axios";
 import { server } from "../../server";
 
 // create event
-export const createevent = (data) => async (dispatch) => {
+export const createevent = (eventData) => async (dispatch) => {
   try {
-    dispatch({
-      type: "eventCreateRequest",
-    });
+    dispatch({ type: "eventCreateRequest" });
 
-    const { data } = await axios.post(`${server}/event/create-event`, data);
+    const response = await axios.post(`${server}/event/create-event`, eventData);
+
     dispatch({
       type: "eventCreateSuccess",
-      payload: data.event,
+      payload: response.data.event, // ✅ Correctly accessing the response data
     });
   } catch (error) {
+    console.error("Error creating event:", error);
+
     dispatch({
       type: "eventCreateFail",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || "Event creation failed",
     });
   }
 };
@@ -24,45 +25,45 @@ export const createevent = (data) => async (dispatch) => {
 // get all events of a shop
 export const getAllEventsShop = (id) => async (dispatch) => {
   try {
-    dispatch({
-      type: "getAlleventsShopRequest",
-    });
+    dispatch({ type: "getAlleventsShopRequest" });
 
-    const { data } = await axios.get(`${server}/event/get-all-events/${id}`);
+    const response = await axios.get(`${server}/event/get-all-events/${id}`);
+
     dispatch({
       type: "getAlleventsShopSuccess",
-      payload: data.events,
+      payload: response.data.events, // ✅ Correctly accessing response data
     });
   } catch (error) {
+    console.error("Error fetching shop events:", error);
+
     dispatch({
       type: "getAlleventsShopFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || "Failed to fetch events",
     });
   }
 };
 
+
 // delete event of a shop
 export const deleteEvent = (id) => async (dispatch) => {
   try {
-    dispatch({
-      type: "deleteeventRequest",
-    });
+    dispatch({ type: "deleteeventRequest" });
 
-    const { data } = await axios.delete(
+    const response = await axios.delete(
       `${server}/event/delete-shop-event/${id}`,
-      {
-        withCredentials: true,
-      }
+      { withCredentials: true }
     );
 
     dispatch({
       type: "deleteeventSuccess",
-      payload: data.message,
+      payload: response.data.message, // ✅ Correctly accessing response data
     });
   } catch (error) {
+    console.error("Error deleting event:", error);
+
     dispatch({
       type: "deleteeventFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || "Failed to delete event",
     });
   }
 };
@@ -70,19 +71,20 @@ export const deleteEvent = (id) => async (dispatch) => {
 // get all events
 export const getAllEvents = () => async (dispatch) => {
   try {
-    dispatch({
-      type: "getAlleventsRequest",
-    });
+    dispatch({ type: "getAlleventsRequest" });
 
-    const { data } = await axios.get(`${server}/event/get-all-events`);
+    const response = await axios.get(`${server}/event/get-all-events`);
+
     dispatch({
       type: "getAlleventsSuccess",
-      payload: data.events,
+      payload: response.data.events, // ✅ Using response.data to avoid 'data' undefined error
     });
   } catch (error) {
+    console.error("Error fetching all events:", error);
+
     dispatch({
       type: "getAlleventsFailed",
-      payload: error.response.data.message,
+      payload: error.response?.data?.message || "Something went wrong",
     });
   }
 };

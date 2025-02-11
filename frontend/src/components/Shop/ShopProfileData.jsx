@@ -16,7 +16,7 @@ const ShopProfileData = ({ isOwner }) => {
   useEffect(() => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const [active, setActive] = useState(1);
 
@@ -53,6 +53,15 @@ const ShopProfileData = ({ isOwner }) => {
               } cursor-pointer pr-[20px]`}
             >
               Shop Reviews
+            </h5>
+          </div>
+          <div className="flex items-center" onClick={() => setActive(4)}>
+            <h5
+              className={`font-[600] text-[20px] ${
+                active === 4 ? "text-red-500" : "text-[#333]"
+              } cursor-pointer pr-[20px]`}
+            >
+              Withdrwa Details
             </h5>
           </div>
         </div>
@@ -108,7 +117,7 @@ const ShopProfileData = ({ isOwner }) => {
                 <img
                   src={`${item.user.avatar?.url}`}
                   className="w-[50px] h-[50px] rounded-full"
-                  alt=""
+                  alt="Shop Profile"
                 />
                 <div className="pl-2">
                   <div className="flex w-full items-center">
@@ -123,6 +132,26 @@ const ShopProfileData = ({ isOwner }) => {
           {allReviews && allReviews.length === 0 && (
             <h5 className="w-full text-center py-5 text-[18px]">
               No Reviews have for this shop!
+            </h5>
+          )}
+        </div>
+      )}
+      {active === 4 && (
+        <div className="w-full">
+          <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
+            {events &&
+              events.map((i, index) => (
+                <ProductCard
+                  data={i}
+                  key={index}
+                  isShop={true}
+                  isEvent={true}
+                />
+              ))}
+          </div>
+          {events && events.length === 0 && (
+            <h5 className="w-full text-center py-5 text-[18px]">
+              No Events have for this shop!
             </h5>
           )}
         </div>

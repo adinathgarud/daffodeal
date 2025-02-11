@@ -8,8 +8,10 @@ import { server } from "../../server";
 import { toast } from "react-toastify";
 import { loadSeller } from "../../redux/actions/user";
 import { AiOutlineDelete } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const WithdrawMoney = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { seller } = useSelector((state) => state.seller);
@@ -26,7 +28,7 @@ const WithdrawMoney = () => {
 
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
-  }, [dispatch]);
+  }, [dispatch, seller._id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,10 +85,11 @@ const WithdrawMoney = () => {
   };
 
   const withdrawHandler = async () => {
-    if (withdrawAmount < 50 || withdrawAmount > availableBalance) {
+    if (withdrawAmount < 500 || withdrawAmount > availableBalance) {
       toast.error("You can't withdraw this amount!");
     } else {
       const amount = withdrawAmount;
+      
       await axios
         .post(
           `${server}/withdraw/create-withdraw-request`,
@@ -95,6 +98,7 @@ const WithdrawMoney = () => {
         )
         .then((res) => {
           toast.success("Withdraw money request is successful!");
+          navigate("/dashboard");
         });
     }
   };
@@ -105,11 +109,11 @@ const WithdrawMoney = () => {
     <div className="w-full h-[90vh] p-8">
       <div className="w-full bg-white h-full rounded flex items-center justify-center flex-col">
         <h5 className="text-[20px] pb-4">
-          Available Balance: ${availableBalance}
+          Available Balance: ₹{availableBalance}
         </h5>
         <div
           className={`${styles.button} text-white !h-[42px] !rounded`}
-          onClick={() => (availableBalance < 50 ? error() : setOpen(true))}
+          onClick={() => (availableBalance < 500 ? error() : setOpen(true))}
         >
           Withdraw
         </div>
@@ -291,7 +295,7 @@ const WithdrawMoney = () => {
                       </div>
                     </div>
                     <br />
-                    <h4>Available Balance: {availableBalance}$</h4>
+                    <h4>Available Balance: {availableBalance}₹</h4>
                     <br />
                     <div className="800px:flex w-full items-center">
                       <input
