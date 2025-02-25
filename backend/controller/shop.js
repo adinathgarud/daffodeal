@@ -9,6 +9,8 @@ const cloudinary = require("cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
+const axios = require("axios");
+require("dotenv").config();
 
 // create shop
 router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
@@ -19,27 +21,30 @@ router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
       return next(new ErrorHandler("User already exists", 400));
     }
 
-    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-      folder: "avatars",
-    });
+    // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    //   folder: "avatars",
+    // });
 
 
     const seller = {
       name: req.body.name,
       email: email,
       password: req.body.password,
-      avatar: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
+      // avatar: {
+      //   public_id: myCloud.public_id,
+      //   url: myCloud.secure_url,
+      // },
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
       zipCode: req.body.zipCode,
+      gstNumber: req.body.gstNumber,
+      gstDetails: req.body.gstDetails,
     };
 
     const activationToken = createActivationToken(seller);
 
     const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
+    //const activationUrl = `http://daffodeal.com/activation/${activationToken}`;
 
     try {
       await sendMail({
@@ -81,7 +86,7 @@ router.post(
       if (!newSeller) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar, zipCode, address, phoneNumber } =
+      const { name, email, password, zipCode, address, phoneNumber, gstNumber, gstDetails } = newSeller;
         newSeller;
 
       let seller = await Shop.findOne({ email });
@@ -93,11 +98,12 @@ router.post(
       seller = await Shop.create({
         name,
         email,
-        avatar,
         password,
         zipCode,
         address,
         phoneNumber,
+        gstNumber,
+        gstDetails,
       });
 
       sendShopToken(seller, 201, res);
@@ -199,39 +205,39 @@ router.get(
 );
 
 // update shop profile picture
-router.put(
-  "/update-shop-avatar",
-  isSeller,
-  catchAsyncErrors(async (req, res, next) => {
-    try {
-      let existsSeller = await Shop.findById(req.seller._id);
+// router.put(
+//   "/update-shop-avatar",
+//   isSeller,
+//   catchAsyncErrors(async (req, res, next) => {
+//     try {
+//       let existsSeller = await Shop.findById(req.seller._id);
 
-        const imageId = existsSeller.avatar.public_id;
+//         const imageId = existsSeller.avatar.public_id;
 
-        await cloudinary.v2.uploader.destroy(imageId);
+//         await cloudinary.v2.uploader.destroy(imageId);
 
-        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-          folder: "avatars",
-          width: 150,
-        });
+//         const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+//           folder: "avatars",
+//           width: 150,
+//         });
 
-        existsSeller.avatar = {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        };
+//         existsSeller.avatar = {
+//           public_id: myCloud.public_id,
+//           url: myCloud.secure_url,
+//         };
 
   
-      await existsSeller.save();
+//       await existsSeller.save();
 
-      res.status(200).json({
-        success: true,
-        seller:existsSeller,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
-  })
-);
+//       res.status(200).json({
+//         success: true,
+//         seller:existsSeller,
+//       });
+//     } catch (error) {
+//       return next(new ErrorHandler(error.message, 500));
+//     }
+//   })
+// );
 
 // update seller info
 router.put(
@@ -359,5 +365,30 @@ router.delete(
     }
   })
 );
+
+router.get("/verify-gst/:gstNumber", async (req, res) => {
+  const { gstNumber } = req.params;
+
+  if (!gstNumber) {
+    return res.status(400).json({ error: "GST Number is required" });
+  }
+
+  try {
+    const response = await axios.get(
+      `https://gst-verification-api-get-profile-returns-data.p.rapidapi.com/v1/gstin/${gstNumber}/details`,
+      {
+        headers: {
+          "x-rapidapi-key": process.env.RAPIDAPI_KEY, // Store API key in .env
+          "x-rapidapi-host": "gst-verification-api-get-profile-returns-data.p.rapidapi.com",
+        },
+      }
+    );
+
+    res.json(response.data); // Send API response to the frontend
+  } catch (error) {
+    console.error("API Error:", error.response ? error.response.data : error.message);
+    res.status(500).json({ error: error.response?.data || "API issue or invalid GST number" });
+  }
+});
 
 module.exports = router;

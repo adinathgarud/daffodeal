@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import logo from "../../../Assests/images/Deffodeal.png"
+import { CgProfile } from "react-icons/cg";
 
 const DashboardHeader = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -53,11 +54,12 @@ const DashboardHeader = () => {
             />
           </Link>
           <Link to={`/shop/${seller._id}`}>
-            <img
+            {/* <img
               src={`${seller.avatar?.url}`}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
-            />
+            /> */}
+            <CgProfile size={35} className="text-gray-600 hover:text-black transition duration-200" />
           </Link>
         </div>
       </div>

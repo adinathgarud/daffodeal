@@ -18,6 +18,7 @@ import { addTocart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 import Ratings from "./Ratings";
 import axios from "axios";
+import { CgProfile } from "react-icons/cg";
 
 const ProductDetails = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -215,11 +216,12 @@ const ProductDetails = ({ data }) => {
                 </div>
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
-                    <img
+                    {/* <img
                       src={data?.shop?.avatar?.url}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
-                    />
+                    /> */}
+                    <CgProfile size={35} className="text-gray-600 hover:text-black transition duration-200" />
                   </Link>
                   <div className="pr-8">
                     <Link to={`/shop/preview/${data?.shop._id}`}>
@@ -321,11 +323,12 @@ const ProductDetailsInfo = ({
           {data &&
             data.reviews.map((item, index) => (
               <div key={index} className="w-full flex my-2">
-                <img
+                {/* <img
                   src={item.user.avatar?.url}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
-                />
+                /> */}
+                <CgProfile size={35} className="text-gray-600 hover:text-black transition duration-200" />
                 <div className="pl-2">
                   <div className="w-full flex items-center">
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>
@@ -349,11 +352,12 @@ const ProductDetailsInfo = ({
           < div className="w-full 800px:w-[50%]">
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
-                <img
+                {/* <img
                   src={data?.shop?.avatar?.url}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
-                />
+                /> */}
+                <CgProfile size={35} className="text-gray-600 hover:text-black transition duration-200" />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
                   <h5 className="pb-2 text-[15px]">

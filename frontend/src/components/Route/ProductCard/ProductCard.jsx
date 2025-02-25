@@ -57,17 +57,17 @@ const ProductCard = ({ data, isEvent }) => {
   };
 
   return (
-    <div className="w-full h-auto bg-white rounded-lg shadow-lg p-4 relative transition-transform transform hover:scale-105">
+    <div className="w-full h-auto bg-white rounded-lg shadow-lg p-2 relative transition-transform transform hover:scale-105">
       <Link to={`${isEvent ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
         <img
           src={data.images && data.images[0]?.url}
           alt={data.name}
-          className="aspect-square w-full rounded-lg bg-gray-200 object-cover transition-opacity duration-300 hover:opacity-75"
+          className="aspect-square w-full rounded-sm bg-gray-200 object-cover transition-opacity duration-300 hover:opacity-75"
         />
       </Link>
       <Link to={`${isEvent ? `/product/${data._id}?isEvent=true` : `/product/${data._id}`}`}>
-        <h5 className="mt-2 text-lg font-semibold text-gray-800">
-          {data.name.length > 40 ? `${data.name.slice(0, 40)}...` : data.name}
+        <h5 className="mt-2 text-[10px] md:text-[12px] lg:text-[14px] xl:text-[16px] font-semibold text-gray-800">
+          {data.name.length > 30 ? `${data.name.slice(0, 30)}...` : data.name}
         </h5>
         <div className="flex items-center justify-between mt-1">
           <div className="flex flex-col">
@@ -80,7 +80,7 @@ const ProductCard = ({ data, isEvent }) => {
               </h6>
             )}
           </div>
-          <span className="text-sm text-gray-600">{data.sold_out} sold</span>
+          <span className="text-[10px] md:text-[12px] lg:text-[14px] xl:text-[16px] text-gray-600">{data.sold_out} sold</span>
         </div>
       </Link>
 
@@ -109,7 +109,7 @@ const ProductCard = ({ data, isEvent }) => {
       </div>
 
       <button
-        className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg transition duration-300 hover:bg-yellow-300 hover:text-black"
+        className="w-full mt-4 px-4 py-2 text-[10px] md:text-[12px] lg:text-[14px] xl:text-[16px] bg-blue-600 text-white rounded-lg transition duration-300 hover:bg-yellow-300 hover:text-black"
         onClick={() => addToCartHandler(data._id)}
         title="Add to cart"
       >

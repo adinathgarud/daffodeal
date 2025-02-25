@@ -6,30 +6,40 @@ import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 import { RxAvatar } from "react-icons/rx";
-import OtpInput from 'react-otp-input';
-import { CgSpinner } from 'react-icons/cg';
-
+import { CgSpinner } from "react-icons/cg";
 
 const ShopCreate = () => {
   const [step, setStep] = useState(1);
+  const [gstNumber, setGstNumber] = useState("");
+  const [gstData, setGstData] = useState(null);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phoneNumber: "",
     address: "",
     zipCode: "",
-    avatar: "",
     password: "",
   });
   const [visible, setVisible] = useState(false);
-  const [showOTPFields, setShowOTPFields] = useState(false);
-  const [otp, setOtp] = useState('');
   const [loading] = useState(false);
 
-  const handleSendOtpClick = () => {
-    setShowOTPFields(true);
-  };
+  const verifyGST = async () => {
+    setError("");
+    setGstData(null);
 
+    if (!gstNumber) {
+      setError("Please enter a GST number.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`${server}/shop/verify-gst/${gstNumber}`);
+      setGstData(response.data.data);
+    } catch (err) {
+      setError("Invalid GST Number or API issue.");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,43 +49,30 @@ const ShopCreate = () => {
     }));
   };
 
-
-  const handleFileInputChange = (e) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setFormData((prevData) => ({
-          ...prevData,
-          avatar: reader.result,
-        }));
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .post(`${server}/shop/create-shop`, formData)
-      .then((res) => {
-        toast.success(res.data.message);
-        setFormData({
-          name: "",
-          email: "",
-          phoneNumber: "",
-          address: "",
-          zipCode: "",
-          avatar: "",
-          password: "",
-        });
-        setStep(1);
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
+    const dataToSend = {
+      ...formData,
+      gstNumber: gstNumber, // Include the GST number
+      gstDetails: gstData,  // Include the fetched GST data
+    };
+
+    try {
+      const response = await axios.post(`${server}/shop/create-shop`, dataToSend);
+      toast.success(response.data.message);
+      setFormData({
+        name: "",
+        email: "",
+        phoneNumber: "",
+        address: "",
+        zipCode: "",
+        password: "",
       });
+      setStep(1);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   const nextStep = () => {
@@ -85,8 +82,6 @@ const ShopCreate = () => {
   const prevStep = () => {
     setStep((prevStep) => prevStep - 1);
   };
-
-
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -116,6 +111,114 @@ const ShopCreate = () => {
                       onChange={handleChange}
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="gstNumber"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    GST Number
+                  </label>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Enter GST Number"
+                      value={gstNumber}
+                      onChange={(e) => setGstNumber(e.target.value)}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={verifyGST}
+                      className="mt-2 text-sm text-blue-600"
+                    >
+                      Verify GST
+                    </button>
+
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    {gstData && (
+                      <div className="mt-6">
+                        <h4 className="text-lg font-semibold mb-2">GST Details</h4>
+                        <table className="w-full border-collapse border border-gray-300">
+                          <tbody>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">GSTIN</td>
+                              <td className="border px-4 py-2">{gstData.gstin}</td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">Legal Name</td>
+                              <td className="border px-4 py-2">{gstData.legal_name}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Business Constitution</td>
+                              <td className="border px-4 py-2">{gstData.business_constitution}</td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">Type</td>
+                              <td className="border px-4 py-2">{gstData.type}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Status</td>
+                              <td className="border px-4 py-2">{gstData.status}</td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">Trade Name</td>
+                              <td className="border px-4 py-2">{gstData.trade_name}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Registration Date</td>
+                              <td className="border px-4 py-2">{gstData.registration_date}</td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">State Jurisdiction</td>
+                              <td className="border px-4 py-2">{gstData.state_jurisdiction}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Centre Jurisdiction</td>
+                              <td className="border px-4 py-2">{gstData.centre_jurisdiction}</td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">Business Activity Nature</td>
+                              <td className="border px-4 py-2">{gstData.business_activity_nature.join(", ")}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Cancellation Date</td>
+                              <td className="border px-4 py-2">{gstData.cancellation_date || "Not Available"}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <h5 className="text-lg font-semibold mt-6 mb-2">Principal Place of Business</h5>
+                        <table className="w-full border-collapse border border-gray-300">
+                          <tbody>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Address</td>
+                              <td className="border px-4 py-2">
+                                {gstData.place_of_business_principal.address.building_name},{" "}
+                                {gstData.place_of_business_principal.address.street},{" "}
+                                {gstData.place_of_business_principal.address.location}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">City</td>
+                              <td className="border px-4 py-2">{gstData.place_of_business_principal.address.district}</td>
+                            </tr>
+                            <tr className="bg-gray-200">
+                              <td className="border px-4 py-2 font-semibold">Pin Code</td>
+                              <td className="border px-4 py-2">{gstData.place_of_business_principal.address.pin_code}</td>
+                            </tr>
+                            <tr>
+                              <td className="border px-4 py-2 font-semibold">Nature of Business</td>
+                              <td className="border px-4 py-2">
+                                {gstData.place_of_business_principal.nature.join(", ")}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -157,52 +260,6 @@ const ShopCreate = () => {
                     />
                   </div>
                 </div>
-
-                <div className="max-w-md mx-auto ">
-                  <button
-                    type="button"
-                    onClick={handleSendOtpClick}
-                    className=" py-3 px-4 border border-transparent rounded-md text-white bg-green-600 hover:bg-green-700 text-sm font-medium"
-                  >
-                    Send OTP
-                  </button>
-
-                  
-                </div>
-                {showOTPFields && (
-                    <div className="mt-6">
-
-                      {/* You can add more OTP input fields here if needed */}
-                      <div className="mt-4">
-                        <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
-                          Enter OTP
-                        </label>
-                        <div className="flex space-x-2 mt-2 mb-2">
-
-                          <OtpInput
-                            value={otp}
-                            onChange={setOtp}
-                            disabled={false}
-                            autoFocus
-                            numInputs={6}
-                            renderSeparator={<span className="text-xl text-gray-600">-</span>}
-                            renderInput={(props) => <input {...props} />}
-                          />
-                        </div>
-                        <button
-                    type="button"
-                    onClick={nextStep}
-                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
-                  >
-                  {
-                    loading && <CgSpinner size={20} className='mr-1 animate-spin' />
-                  }
-                    
-                    <span> Verify</span>
-                  </button>
-                      </div>
-                    </div>
-                  )}
 
                 <div className="flex justify-end">
                   <button
@@ -289,39 +346,6 @@ const ShopCreate = () => {
                   </div>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="avatar"
-                    className="block text-sm font-medium text-gray-700"
-                  ></label>
-                  <div className="mt-2 flex items-center">
-                    <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                      {formData.avatar ? (
-                        <img
-                          src={formData.avatar}
-                          alt="avatar"
-                          className="h-full w-full object-cover rounded-full"
-                        />
-                      ) : (
-                        <RxAvatar className="h-8 w-8" />
-                      )}
-                    </span>
-                    <label
-                      htmlFor="file-input"
-                      className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                      <span>Upload a file</span>
-                      <input
-                        type="file"
-                        name="avatar"
-                        id="file-input"
-                        onChange={handleFileInputChange}
-                        className="sr-only"
-                      />
-                    </label>
-                  </div>
-                </div>
-
                 <div className="flex justify-between">
                   <button
                     type="button"
@@ -353,29 +377,3 @@ const ShopCreate = () => {
 };
 
 export default ShopCreate;
-
-
-
-
-
-// Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAEp-mueFTRiSsuEH9QxOuOq4I4j3TzjMg",
-//   authDomain: "otp-project-1030.firebaseapp.com",
-//   projectId: "otp-project-1030",
-//   storageBucket: "otp-project-1030.firebasestorage.app",
-//   messagingSenderId: "18790755304",
-//   appId: "1:18790755304:web:0307564f385e7cf818525d",
-//   measurementId: "G-PD9DDSRJNN"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);

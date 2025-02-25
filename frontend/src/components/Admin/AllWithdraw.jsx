@@ -42,6 +42,31 @@ const AllWithdraw = () => {
       flex: 1.4,
     },
     {
+      field: "bankName",
+      headerName: "Bank Name",
+      minWidth: 180,
+      flex: 1.4,
+    },
+    {
+      field: "bankAccountNumber",
+      headerName: "Bank Account Number",
+      minWidth: 180,
+      flex: 1.4,
+    },
+    {
+      field: "bankSwiftCode",
+      headerName: "Bank Swift Code",
+      minWidth: 180,
+      flex: 1.4,
+    },
+    {
+      field: "bankHolderName",
+      headerName: "Bank Holder Name",
+      minWidth: 180,
+      flex: 1.4,
+    },
+    
+    {
       field: "amount",
       headerName: "Amount",
       minWidth: 100,
@@ -99,6 +124,10 @@ const AllWithdraw = () => {
       row.push({
         id: item._id,
         shopId: item.seller._id,
+        bankName:item.seller.withdrawMethod.bankName,
+        bankAccountNumber:item.seller.withdrawMethod.bankAccountNumber,
+        bankSwiftCode:item.seller.withdrawMethod.bankSwiftCode,
+        bankHolderName:item.seller.withdrawMethod.bankHolderName,
         name: item.seller.name,
         amount: "INR₹ " + item.amount,
         status: item.status,
@@ -107,7 +136,7 @@ const AllWithdraw = () => {
     });
   return (
     <div className="w-full flex items-center pt-5 justify-center">
-      <div className="w-[95%] bg-white">
+      <div className="w-[100%] bg-white">
         <DataGrid
           rows={row}
           columns={columns}
@@ -125,6 +154,7 @@ const AllWithdraw = () => {
             <h1 className="text-[25px] text-center font-Poppins">
               Update Withdraw status
             </h1>
+
             <br />
             <select
               name=""

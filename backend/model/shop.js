@@ -24,10 +24,6 @@ const shopSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // adhharNumber: {
-  //   type: Number,
-  //   required: true,
-  // },
   phoneNumber: {
     type: Number,
     required: true,
@@ -36,14 +32,96 @@ const shopSchema = new mongoose.Schema({
     type: String,
     default: "Seller",
   },
-  avatar: {
-    public_id: {
+  gstNumber: {
+    type: String,
+    required: true,
+  },
+  gstDetails: {
+    gstin: {
       type: String,
       required: true,
     },
-    url: {
+    legal_name: {
       type: String,
       required: true,
+    },
+    state_jurisdiction: {
+      type: String,
+      required: true,
+    },
+    centre_jurisdiction: {
+      type: String,
+      required: true,
+    },
+    registration_date: {
+      type: Date,
+      required: true,
+    },
+    business_constitution: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+    business_activity_nature: {
+      type: [String],
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+    trade_name: {
+      type: String,
+      required: true,
+    },
+    state_jurisdiction_code: {
+      type: String,
+      required: true,
+    },
+    centre_jurisdiction_code: {
+      type: String,
+      required: true,
+    },
+    place_of_business_principal: {
+      address: {
+        building_name: {
+          type: String,
+          required: true,
+        },
+        street: {
+          type: String,
+          required: true,
+        },
+        location: {
+          type: String,
+          required: true,
+        },
+        door_num: {
+          type: String,
+        },
+        state: {
+          type: String,
+          required: true,
+        },
+        floor_num: {
+          type: String,
+        },
+        district: {
+          type: String,
+          required: true,
+        },
+        pin_code: {
+          type: String,
+          required: true,
+        },
+      },
+      nature: {
+        type: [String],
+        required: true,
+      },
     },
   },
   zipCode: {

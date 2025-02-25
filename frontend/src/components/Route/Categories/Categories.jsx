@@ -22,12 +22,12 @@ const Categories = () => {
   };
 
   return (
-    <div className={`${styles} bg-white p-3 rounded-lg`} id="categories">
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6">
+    <div className={` bg-white p-3 top-7 rounded-lg`} id="categories">
+      <div className="grid grid-cols-6 gap-2 md:grid-cols-6 lg:grid-cols-6 xl:grid-cols-6">
         {categoriesData &&
           categoriesData.map((category) => (
             <div
-              className="relative w-full h-auto flex flex-col items-center cursor-pointer overflow-hidden group"
+              className="relative w-full h-auto flex flex-col items-center cursor-pointer group"
               key={category.id}
               onMouseEnter={() => handleMouseEnter(category)}
               onMouseLeave={handleMouseLeave}
@@ -35,10 +35,10 @@ const Categories = () => {
             >
               <img
                 src={category.image_Url}
-                className="w-[50px] object-cover mb-1"
+                className=" w-[25px] md:w-[30px] lg:text-[35px] xl:text-[50px] object-cover mb-1"
                 alt={category.title}
               />
-              <h5 className="text-[16px] leading-[1.9] flex items-center">
+              <h5 className="text-[6px] md:text-[12px] lg:text-[14] xl:text-[16] leading-[1.9] flex items-center">
                 {category.title}
                 <FaChevronDown
                   className={`ml-1 text-gray-500 transition-transform duration-300 ${
@@ -49,7 +49,7 @@ const Categories = () => {
 
               {/* Subcategories Menu */}
               {hoveredCategory === category && (
-                <div className="relative left-0 z-50 mt-2 w-full bg-gray-100 rounded-md shadow-md p-1 transition-opacity duration-300">
+                <div className="absolute left-0 top-12 z-20 mt-0 w-full bg-gray-100 rounded-md shadow-md p-1 transition-opacity duration-300 overflow-visible">
                   {category.subcategories && category.subcategories.map((sub) => (
                     <div
                       key={sub.id}
@@ -59,7 +59,7 @@ const Categories = () => {
                         navigate(`/products?subcategory=${sub.title}`);
                       }}
                     >
-                      <h5 className="text-[16px] leading-[1.9] flex items-center">{sub.title}</h5>
+                      <h5 className="md:text-[12px] lg:text-[14] xl:text-[16] leading-[1.9] flex items-center">{sub.title}</h5>
                     </div>
                   ))}
                 </div>

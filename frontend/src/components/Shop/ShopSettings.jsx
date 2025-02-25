@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 const ShopSettings = () => {
   const { seller } = useSelector((state) => state.seller);
-  const [avatar, setAvatar] = useState();
+  //const [avatar, setAvatar] = useState();
   const [name, setName] = useState(seller && seller.name);
   const [description, setDescription] = useState(
     seller && seller.description ? seller.description : ""
@@ -20,32 +20,32 @@ const ShopSettings = () => {
 
   const dispatch = useDispatch();
 
-  const handleImage = async (e) => {
-    const reader = new FileReader();
+  // const handleImage = async (e) => {
+  //   const reader = new FileReader();
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatar(reader.result);
-        axios
-          .put(
-            `${server}/shop/update-shop-avatar`,
-            { avatar: reader.result },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            dispatch(loadSeller());
-            toast.success("Avatar updated successfully!");
-          })
-          .catch((error) => {
-            toast.error(error.response.data.message);
-          });
-      }
-    };
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       setAvatar(reader.result);
+  //       axios
+  //         .put(
+  //           `${server}/shop/update-shop-avatar`,
+  //           { avatar: reader.result },
+  //           {
+  //             withCredentials: true,
+  //           }
+  //         )
+  //         .then((res) => {
+  //           dispatch(loadSeller());
+  //           toast.success("Avatar updated successfully!");
+  //         })
+  //         .catch((error) => {
+  //           toast.error(error.response.data.message);
+  //         });
+  //     }
+  //   };
 
-    reader.readAsDataURL(e.target.files[0]);
-  };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
 
   const updateHandler = async (e) => {
     e.preventDefault();
@@ -74,7 +74,7 @@ const ShopSettings = () => {
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
       <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5">
-        <div className="w-full flex items-center justify-center">
+        {/* <div className="w-full flex items-center justify-center">
           <div className="relative">
             <img
               src={avatar ? avatar : `${seller.avatar?.url}`}
@@ -93,7 +93,7 @@ const ShopSettings = () => {
               </label>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* shop info */}
         <form

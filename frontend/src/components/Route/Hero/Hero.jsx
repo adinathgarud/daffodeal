@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css"; // Import default theme styles
 const Hero = () => {
   const sliderData = [
     {
-      img: "https://themes.rslahmed.dev/rafcart/assets/images/banner-2.jpg",
+      img: "https://themes.rslahmed.dev/rafcart/assets/images/banner-1.jpg",
       title: "Elegant Jewelry",
       description: "A fine collection of jewelry designed to complement your elegance.",
     },
@@ -17,7 +17,7 @@ const Hero = () => {
       description: "Transform your living space with stunning home décor pieces.",
     },
     {
-      img: "https://themes.rslahmed.dev/rafcart/assets/images/banner-2.jpg",
+      img: "https://themes.rslahmed.dev/rafcart/assets/images/banner-3.jpg",
       title: "Luxury & Style",
       description: "Indulge in luxury with our exclusive products that redefine style.",
     },
@@ -31,13 +31,14 @@ const Hero = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    arrows: false,
   };
 
   return (
-    <div className="relative w-full mb-4 z-10">
+    <div className="relative w-full mb-4 ">
       <Slider {...sliderSettings}>
         {sliderData.map((item, index) => (
-          <div key={index} className="relative w-full h-full">
+          <div key={index} className="relative w-100% h-full">
             {/* Background Image */}
             <img
               src={item.img}

@@ -5,10 +5,20 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-app.use(cors({
-  origin: ['http://localhost:3000',],
-  credentials: true
-}));
+//app.use(cors());
+// app.use(cors({
+//   origin: ['http://localhost:3000',],
+//   credentials: true
+// }));
+
+const corsOptions = {
+  origin: ["http://localhost:3000", "https://daffodeal.com", "http://daffodeal.com"],
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());

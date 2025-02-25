@@ -6,6 +6,7 @@ import { MdOutlineLocalOffer } from 'react-icons/md'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import logo from '../../Assests/images/Deffodeal.png'
+import { CgProfile } from 'react-icons/cg'
 
 const AdminHeader = () => {
     const {user} = useSelector((state) => state.user);
@@ -53,11 +54,12 @@ const AdminHeader = () => {
               className="mx-5 cursor-pointer"
             />
           </Link>
-            <img
+            {/* <img
               src={`${user?.avatar?.url}`}
               alt=""
               className="w-[50px] h-[50px] rounded-full object-cover"
-            />
+            /> */}
+            <CgProfile size={35} className="text-gray-600 hover:text-black transition duration-200" />
         </div>
       </div>
     </div>

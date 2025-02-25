@@ -95,8 +95,8 @@ const AllUsers = () => {
     });
 
   return (
-    <div className="w-full flex justify-center pt-5">
-      <div className="w-[97%]">
+    <div className="w-full flex items-center pt-5 justify-center">
+      <div className="w-[100%] bg-white">
         <h3 className="text-[22px] font-Poppins pb-2">All Users</h3>
         <div className="w-full min-h-[45vh] bg-white rounded">
           <DataGrid

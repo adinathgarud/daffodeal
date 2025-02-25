@@ -9,18 +9,26 @@ const BestDeals = () => {
   useEffect(() => {
     const allProductsData = allProducts ? [...allProducts] : [];
     const sortedData = allProductsData?.sort((a,b) => b.sold_out - a.sold_out); 
-    const firstFive = sortedData && sortedData.slice(0, 5);
+    const firstFive = sortedData && sortedData.slice(0, 20);
     setData(firstFive);
   }, [allProducts]);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1, // Show one product at a time
+    slidesToScroll: 1,
+  };
   
 
   return (
     <div>
       <div className={`${styles.section}`}>
-        <div className={`${styles.heading}`}>
+        {/* <div className={`${styles.heading}`}>
           <h1>Best Deals</h1>
-        </div>
-        <div className="grid grid-cols-2 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12 border-0">
+        </div> */}
+        <div className="grid grid-cols-3 gap-[5px] md:grid-cols-3 md:gap-[8px] lg:grid-cols-4 lg:gap-[10px] xl:grid-cols-5 xl:gap-[12px] mb-12 border-0">
            {
             data && data.length !== 0 &&(
               <>
@@ -35,3 +43,7 @@ const BestDeals = () => {
 };
 
 export default BestDeals;
+
+
+
+

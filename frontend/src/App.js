@@ -61,6 +61,10 @@ import axios from "axios";
 import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import AboutPage from "./pages/AboutPage.jsx";
+import CareersPage from "./pages/CareersPage.jsx";
+import ContactUsPage from "./pages/ContactUsPage.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 
 const App = () => {
   const [razorpayApikey, setRazorpayApikey] = useState("");
@@ -110,6 +114,10 @@ const App = () => {
         <Route path="/best-selling" element={<BestSellingPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FAQPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/carrers" element={<CareersPage />} />
+        <Route path="/contact-us" element={<ContactUsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route
           path="/checkout"
           element={
@@ -319,8 +327,8 @@ const App = () => {
         />
       </Routes>
       <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
+        position="top-center"
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

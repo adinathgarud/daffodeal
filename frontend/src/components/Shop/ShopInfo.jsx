@@ -50,13 +50,13 @@ const ShopInfo = ({ isOwner }) => {
     ) : (
       <div>
       <div className="w-full py-5">
-        <div className="w-full flex item-center justify-center">
+        {/* <div className="w-full flex item-center justify-center">
           <img
             src={`${data.avatar?.url}`}
             alt=""
             className="w-[150px] h-[150px] object-cover rounded-full"
           />
-        </div>
+        </div> */}
         <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
         <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
           {data.description}
